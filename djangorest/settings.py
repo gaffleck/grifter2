@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'djangorest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME', None),,
+        'NAME': os.environ.get('DB_NAME', None),
         'USER': os.environ.get('DB_USER', None),
         'PASSWORD': os.environ.get('DB_PASS', None),
         'HOST': os.environ.get('DB_HOST', None),
