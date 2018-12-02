@@ -25,7 +25,7 @@ SECRET_KEY = 'zj%ce)z6dehy@ny%^#ron!3!^^b7du#fs&&p(ast)(dwa51n&%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['grifter2.herokuapp.com']
 
 
 # Application definition
