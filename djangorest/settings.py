@@ -25,7 +25,11 @@ SECRET_KEY = 'zj%ce)z6dehy@ny%^#ron!3!^^b7du#fs&&p(ast)(dwa51n&%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['grifter2.herokuapp.com']
+ALLOWED_HOSTS = [
+    'grifter2.herokuapp.com',
+    'localhost'
+
+]
 
 
 # Application definition
@@ -77,8 +81,12 @@ WSGI_APPLICATION = 'djangorest.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME', None),,
+        'USER': os.environ.get('DB_USER', None),
+        'PASSWORD': os.environ.get('DB_PASS', None),
+        'HOST': os.environ.get('DB_HOST', None),
+        'PORT': os.environ.get('DB_PORT', None),
     }
 }
 

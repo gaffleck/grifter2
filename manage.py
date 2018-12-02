@@ -6,6 +6,11 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
+is_heroku = os.environ.get('IS_HEROKU', None)
+
+if is_heroku == None:
+    import dev_settings
+
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangorest.settings')   
 
