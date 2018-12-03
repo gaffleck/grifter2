@@ -11,7 +11,7 @@ urlpatterns = {
     url('friends/$', FriendCreateView.as_view(), name="create"),
     url('friends/(?P<pk>[0-9]+)/$',
         FriendDetailsView.as_view(), name="details"),
-    #url('',schema_view)
+    
     
 }
 
