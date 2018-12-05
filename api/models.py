@@ -28,18 +28,23 @@ class Friend(models.Model):
 class Gift(models.Model):
     """Gift Model Class """
     gift_name = models.CharField(max_length=255, blank=False)
-    price = models.IntegerField()
-    date_given = models.DateTimeField()
-    friend = models.ForeignKey(Friend, related_name='gifts', on_delete=models.CASCADE)
 
     def __str__(self):
         return "{}".format(self.gift_name)
 
+class GiftRecord(models.Model):
+    """Record of a gift given"""
+    gift = models.ForeignKey(Gift, on_delete=models.CASCADE)
+    price = models.IntegerField()
+    date_given = models.DateTimeField()
+    friend = models.ForeignKey(Friend, related_name='gift_history', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}".format(self.gift.gift_name)
+
 class GiftSuggestion(models.Model):
     """Gift Suggestion Class """
     date_suggested = models.DateTimeField(auto_now=True)
-    customer = models.ForeignKey(Customer, related_name='gift_suggestions',
-                                 on_delete=models.CASCADE)
     friend = models.ForeignKey(Friend, on_delete=models.CASCADE)
     gift = models.ForeignKey(Gift, on_delete=models.CASCADE)
 

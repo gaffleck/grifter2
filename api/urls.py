@@ -2,7 +2,7 @@
 
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import CustomerCreateView, CustomerDetailsView, FriendCreateView, FriendDetailsView, GiftCreateView, GiftDetailsView
+from .views import CustomerCreateView, CustomerDetailsView, FriendCreateView, FriendDetailsView, GiftRecordCreateView, GiftRecordDetailsView, GiftCreateView, GiftDetailsView
 
 urlpatterns = {
     url('customers/$', CustomerCreateView.as_view(), name="create"),
@@ -11,6 +11,9 @@ urlpatterns = {
     url('friends/$', FriendCreateView.as_view(), name="create"),
     url('friends/(?P<pk>[0-9]+)/$',
         FriendDetailsView.as_view(), name="details"),
+    url('giftRecords/$', GiftRecordCreateView.as_view(), name="create"),
+    url('giftRecords/(?P<pk>[0-9]+)/$',
+        GiftRecordDetailsView.as_view(), name="details"),
     url('gifts/$', GiftCreateView.as_view(), name="create"),
     url('gifts/(?P<pk>[0-9]+)/$',
         GiftDetailsView.as_view(), name="details"),
