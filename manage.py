@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""Main entry point """
 import os
 import sys
 
@@ -6,9 +6,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
-is_heroku = os.environ.get('IS_HEROKU', None)
+IS_HEROKU = os.environ.get('IS_HEROKU', None)
 
-if is_heroku == None:
+if IS_HEROKU is None:
     import dev_settings
 
 if __name__ == '__main__':

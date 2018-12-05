@@ -10,9 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os 
+import os
 from os.path import normpath
-import django_heroku
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework', 
+    'rest_framework',
     'api',
     'rest_framework_swagger',
     'corsheaders'
@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',   
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'   
 ]
 
 ROOT_URLCONF = 'djangorest.urls'
@@ -136,4 +136,8 @@ STATIC_URL = '/static/'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-django_heroku.settings(locals())
+is_heroku = os.environ.get('IS_HEROKU', None)
+
+if is_heroku == True:
+    import django_heroku
+    django_heroku.settings(locals())
