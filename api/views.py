@@ -1,8 +1,8 @@
 """API Views"""
 
 from rest_framework import generics
-from .serializers import CustomerSerializer, FriendSerializer
-from .models import Customer, Friend
+from .serializers import CustomerSerializer, FriendSerializer, GiftSerializer
+from .models import Customer, Friend, Gift
 
 class CustomerCreateView(generics.ListCreateAPIView):
     """This class defines the create behavior of our rest api."""
@@ -29,3 +29,13 @@ class FriendDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = Friend.objects.all()
     serializer_class = FriendSerializer
+
+class GiftCreateView(generics.ListCreateAPIView):
+    """view for rest API"""
+    queryset = Gift.objects.all()
+    serializer_class = GiftSerializer
+
+class GiftDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """CUD actions"""
+    queryset = Gift.objects.all()
+    serializer_class = GiftSerializer

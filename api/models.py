@@ -30,7 +30,7 @@ class Gift(models.Model):
     gift_name = models.CharField(max_length=255, blank=False)
     price = models.IntegerField()
     date_given = models.DateTimeField()
-    customer = models.ForeignKey(Customer, related_name='gifts', on_delete=models.CASCADE)
+    friend = models.ForeignKey(Friend, related_name='gifts', on_delete=models.CASCADE)
 
     def __str__(self):
         return "{}".format(self.gift_name)
