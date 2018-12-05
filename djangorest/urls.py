@@ -18,7 +18,7 @@ from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
 
 urlpatterns = [
-    path('', get_swagger_view(title='Grifter UI')),
+    path('swagger', get_swagger_view(title='Grifter UI')),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     ]
