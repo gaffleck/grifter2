@@ -10,7 +10,6 @@ class FriendSerializer(serializers.ModelSerializer):
         model = Friend
         fields = ('id', 'first_name', 'last_name', 'customer', 'date_created', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
-        
 
 class FriendSubSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
