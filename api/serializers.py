@@ -1,7 +1,7 @@
 # api/serializers.py
 """Serializers """
 from rest_framework import serializers
-from .models import Customer, Friend, GiftRecord, Gift, GiftSuggestion
+from .models import Customer, Friend, GiftRecord, Gift, GiftSuggestion, SpecialDateType, SpecialDate
 
 class GiftSerializer(serializers.ModelSerializer):
     """Serialize the gift"""
@@ -26,18 +26,40 @@ class GiftSuggestionSerializer(serializers.ModelSerializer):
         model = GiftSuggestion
         fields = ('gift', 'friend')
 
+class SpecialDateTypeSerializer(serializers.ModelSerializer):
+    """Serialize the model type """
+
+    class Meta:
+        """map serializer to model"""
+        model = SpecialDateType
+        fields = ('date_type',)
+
+class SpecialDateSerializer(serializers.ModelSerializer):
+    """ Serialize the model type"""
+    date_type = SpecialDateTypeSerializer(required=True, many=False)
+
+    class Meta: 
+        model = SpecialDate
+        fields = ('friend', 'date', 'date_type')
+
+class SpecialDateSubSerializer(serializers.ModelSerializer):
+    """ Serialize the model type"""
+    date_type = serializers.StringRelatedField(many=False) #SpecialDateTypeSerializer(required=True, many=False)
+
+    class Meta: 
+        model = SpecialDate
+        fields = ('date', 'date_type')
 
 class FriendSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     gift_history = GiftRecordSerializer(required=False, many=True)
+    special_dates = SpecialDateSubSerializer(required=False, many=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Friend
-        fields = ('id', 'first_name', 'last_name', 'customer', 'gift_history',
-                  'date_created', 'date_modified')
+        fields = ('id', 'first_name', 'last_name', 'customer', 'gift_history', 'special_dates', 'date_created', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
-
 
 class FriendSubSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""

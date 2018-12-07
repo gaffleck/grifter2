@@ -1,5 +1,8 @@
 """models class"""
 from django.db import models
+import logging 
+
+logger = logging.getLogger(__name__)
 
 
 class Customer(models.Model):
@@ -25,9 +28,33 @@ class Friend(models.Model):
         """Return a human readable representation of the model instance."""
         return "{}".format(self.first_name)
 
+class SpecialDateType(models.Model):
+    """types of special Dates"""
+    date_type = models.CharField(max_length=255, blank=False)
+
+    def __str__(self):
+        """types of special date"""
+        return "{}".format(self.date_type)
+
+
+class SpecialDate(models.Model):
+    """Special Dates Class"""
+    friend = models.ForeignKey(Friend, related_name='special_dates', on_delete=models.CASCADE)
+    date = models.DateField()
+    date_type = models.ForeignKey(SpecialDateType, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        """return a human readable representation"""
+        return 'Special date for {} of {}'.format(self.friend.first_name, self.date)
+
+
 class Gift(models.Model):
     """Gift Model Class """
     gift_name = models.CharField(max_length=255, blank=False)
+    gift_description = models.CharField(max_length=1000, blank=True)
+    source = models.CharField(max_length=255, blank=False)
+
 
     def __str__(self):
         return "{}".format(self.gift_name)
