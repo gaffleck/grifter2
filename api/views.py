@@ -1,15 +1,15 @@
 """API Views"""
 
 from rest_framework import generics
-from .serializers import CustomerSerializer, FriendSerializer, GiftRecordSerializer, GiftSerializer, GiftSuggestionSerializer, SpecialDateTypeSerializer, SpecialDateSerializer
-from .models import Customer, Friend, GiftRecord, Gift, GiftSuggestion, SpecialDateType, SpecialDate
+from .serializers import UserSerializer, ContactSerializer, GiftRecordSerializer, GiftSerializer, GiftSuggestionSerializer, SpecialDateTypeSerializer, SpecialDateSerializer
+from .models import User, Contact, GiftRecord, Gift, GiftSuggestion, SpecialDateType, SpecialDate
 import logging
 logger = logging.getLogger(__name__)
 
-class CustomerCreateView(generics.ListCreateAPIView):
+class UserCreateView(generics.ListCreateAPIView):
     """This class defines the create behavior of our rest api."""
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     def post(self, request, *args, **kwargs):
         logger.debug('saving a new customer')
@@ -19,23 +19,23 @@ class CustomerCreateView(generics.ListCreateAPIView):
         logger.debug('saving a new customer')
         serializer.save()
 
-class CustomerDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    """ Customer Details View"""
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
+class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ User Details View"""
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-class FriendCreateView(generics.ListCreateAPIView):
+class ContactCreateView(generics.ListCreateAPIView):
     """This class defines the create behavior of our rest api."""
-    queryset = Friend.objects.all()
-    serializer_class = FriendSerializer
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
 
     def perform_create(self, serializer):
         serializer.save()
 
-class FriendDetailsView(generics.RetrieveUpdateDestroyAPIView):
+class ContactDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
-    queryset = Friend.objects.all()
-    serializer_class = FriendSerializer
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
 
 class GiftRecordCreateView(generics.ListCreateAPIView):
     """view for rest API"""

@@ -1,7 +1,7 @@
 # api/serializers.py
 """Serializers """
 from rest_framework import serializers
-from .models import Customer, Friend, GiftRecord, Gift, GiftSuggestion, SpecialDateType, SpecialDate
+from .models import User, Contact, GiftRecord, Gift, GiftSuggestion, SpecialDateType, SpecialDate
 
 class GiftSerializer(serializers.ModelSerializer):
     """Serialize the gift"""
@@ -16,7 +16,7 @@ class GiftRecordSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serialer to model"""
         model = GiftRecord
-        fields = ('gift', 'price', 'date_given', 'friend')
+        fields = ('gift', 'price', 'date_given', 'contact')
 
 class GiftSuggestionSerializer(serializers.ModelSerializer):
     """Serializer for a gift suggestion"""
@@ -24,7 +24,7 @@ class GiftSuggestionSerializer(serializers.ModelSerializer):
     class Meta:
         """ Meta to map serializer to model"""
         model = GiftSuggestion
-        fields = ('gift', 'friend')
+        fields = ('gift', 'contact')
 
 class SpecialDateTypeSerializer(serializers.ModelSerializer):
     """Serialize the model type """
@@ -36,11 +36,11 @@ class SpecialDateTypeSerializer(serializers.ModelSerializer):
 
 class SpecialDateSerializer(serializers.ModelSerializer):
     """ Serialize the model type"""
-    date_type = SpecialDateTypeSerializer(required=True, many=False)
+    #date_type = SpecialDateTypeSerializer(required=True, many=False)
 
     class Meta: 
         model = SpecialDate
-        fields = ('friend', 'date', 'date_type')
+        fields = ('contact', 'date', 'date_type')
 
 class SpecialDateSubSerializer(serializers.ModelSerializer):
     """ Serialize the model type"""
@@ -50,34 +50,34 @@ class SpecialDateSubSerializer(serializers.ModelSerializer):
         model = SpecialDate
         fields = ('date', 'date_type')
 
-class FriendSerializer(serializers.ModelSerializer):
+class ContactSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     gift_history = GiftRecordSerializer(required=False, many=True)
     special_dates = SpecialDateSubSerializer(required=False, many=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
-        model = Friend
-        fields = ('id', 'first_name', 'last_name', 'customer', 'gift_history', 'image', 'special_dates', 'date_created', 'date_modified')
+        model = Contact
+        fields = ('id', 'first_name', 'last_name', 'user', 'gift_history', 'image', 'special_dates', 'date_created', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
-class FriendSubSerializer(serializers.ModelSerializer):
+class ContactSubSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     gift_history = GiftRecordSerializer(required=False, many=True)
+    special_dates = SpecialDateSubSerializer(required=False, many=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
-        model = Friend
-        fields = ('id', 'first_name', 'last_name', 'gift_history', 'image', 'date_created', 'date_modified')
+        model = Contact
+        fields = ('id', 'first_name', 'last_name', 'gift_history', 'image', 'date_created', 'special_dates', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
-class CustomerSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
-    friends = FriendSubSerializer(required=False, many=True)
+    contacts = ContactSubSerializer(required=False, many=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
-        model = Customer
-        fields = ('id', 'first_name', 'last_name', 'image', 'date_created', 'date_modified', 'friends')
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'image', 'date_created', 'date_modified', 'contacts')
         read_only_fields = ('date_created', 'date_modified')
-

@@ -2,18 +2,18 @@
 
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import CustomerCreateView, CustomerDetailsView, FriendCreateView, \
-FriendDetailsView, GiftRecordCreateView, GiftRecordDetailsView, GiftCreateView, \
+from .views import UserCreateView, UserDetailsView, ContactCreateView, \
+ContactDetailsView, GiftRecordCreateView, GiftRecordDetailsView, GiftCreateView, \
 GiftDetailsView, GiftSuggestionDetailsView, GiftSuggestionCreateView, SpecialDateTypeCreateView,\
 SpecialDateTypeDetailsView, SpecialDateCreateView, SpecialDateDetailsView
 
 urlpatterns = {
-    url('customers/$', CustomerCreateView.as_view(), name="create"),
-    url('customers/(?P<pk>[0-9]+)/$',
-        CustomerDetailsView.as_view(), name="details"),
-    url('friends/$', FriendCreateView.as_view(), name="create"),
-    url('friends/(?P<pk>[0-9]+)/$',
-        FriendDetailsView.as_view(), name="details"),
+    url('user/$', UserCreateView.as_view(), name="create"),
+    url('users/(?P<pk>[0-9]+)/$',
+        UserDetailsView.as_view(), name="details"),
+    url('contacts/$', ContactCreateView.as_view(), name="create"),
+    url('contacts/(?P<pk>[0-9]+)/$',
+        ContactDetailsView.as_view(), name="details"),
     url('giftRecords/$', GiftRecordCreateView.as_view(), name="create"),
     url('giftRecords/(?P<pk>[0-9]+)/$',
         GiftRecordDetailsView.as_view(), name="details"),
