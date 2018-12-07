@@ -11,6 +11,7 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=255, blank=False, unique=False)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    image = models.CharField(max_length=255, blank=True, unique=False)
 
     def __str__(self):
         """Return a human readable representation of the model instance."""
@@ -23,6 +24,7 @@ class Friend(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     customer = models.ForeignKey(Customer, related_name='friends', on_delete=models.CASCADE)
+    image = models.CharField(max_length=255, blank=True, unique=False)
 
     def __str__(self):
         """Return a human readable representation of the model instance."""
@@ -54,6 +56,7 @@ class Gift(models.Model):
     gift_name = models.CharField(max_length=255, blank=False)
     gift_description = models.CharField(max_length=1000, blank=True)
     source = models.CharField(max_length=255, blank=False)
+    image = models.CharField(max_length=255, blank=True, unique=False)
 
 
     def __str__(self):

@@ -8,7 +8,7 @@ class GiftSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Gift
-        fields = ('gift_name',)
+        fields = ('gift_name', 'image', 'gift_description', 'source')
 
 class GiftRecordSerializer(serializers.ModelSerializer):
     """Serializer for the gift record"""
@@ -58,7 +58,7 @@ class FriendSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Friend
-        fields = ('id', 'first_name', 'last_name', 'customer', 'gift_history', 'special_dates', 'date_created', 'date_modified')
+        fields = ('id', 'first_name', 'last_name', 'customer', 'gift_history', 'image', 'special_dates', 'date_created', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
 class FriendSubSerializer(serializers.ModelSerializer):
@@ -68,7 +68,7 @@ class FriendSubSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Friend
-        fields = ('id', 'first_name', 'last_name', 'gift_history', 'date_created', 'date_modified')
+        fields = ('id', 'first_name', 'last_name', 'gift_history', 'image', 'date_created', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -78,6 +78,6 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'date_created', 'date_modified', 'friends')
+        fields = ('id', 'first_name', 'last_name', 'image', 'date_created', 'date_modified', 'friends')
         read_only_fields = ('date_created', 'date_modified')
 
