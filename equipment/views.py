@@ -1,7 +1,7 @@
 import django_filters.rest_framework
 from rest_framework import generics
-from .serializers import LotSerializer
-from .models import Lot
+from .serializers import LotSerializer, CustomerSerializer
+from .models import Lot, Customer
 
 class LotsListView(generics.ListAPIView):
     """ Lot List View"""
@@ -19,3 +19,9 @@ class LotsListView(generics.ListAPIView):
         if lot is not None:
             queryset = queryset.filter(lot_num=lot)
         return queryset
+
+class CustomerListView(generics.ListAPIView):
+    """ Lot List View"""
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    #filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
