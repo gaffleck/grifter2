@@ -33,6 +33,10 @@ ALLOWED_HOSTS = [
 
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
 
 # Application definition
 
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
+    'equipment',
     'rest_framework_swagger',
     'corsheaders'
 ]
@@ -87,7 +92,8 @@ WSGI_APPLICATION = 'djangorest.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        
+        'ENGINE': 'sql_server.pyodbc',
         'NAME': os.environ.get('DB_NAME', None),
         'USER': os.environ.get('DB_USER', None),
         'PASSWORD': os.environ.get('DB_PASS', None),

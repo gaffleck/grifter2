@@ -21,4 +21,5 @@ urlpatterns = [
     path('swagger', get_swagger_view(title='Grifter UI')),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    path('equipment/', include('equipment.urls')),
     ]
