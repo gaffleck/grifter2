@@ -9,6 +9,19 @@ class Lot(models.Model):
     lot_model_name = models.CharField(max_length=15, null=True)
     lot_model_desc = models.CharField(max_length=35, null=True)
     lot_inventoryid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    lot_bidder_number = models.IntegerField(null=True, db_column='lot_bidnum')
+    lot_equipment_code = models.CharField(max_length=5, null=True, db_column='lot_eqgrpcode')
+    lot_equipment_type = models.CharField(max_length=5, null=True, db_column='lot_eqtype')
+    lot_equipment_sub_type = models.CharField(max_length=5, null=True, db_column='lot_eqsubtype')
+    lot_sold_price = models.DecimalField(db_column='lot_soldprice', max_digits=13, decimal_places=2, null=True)
+    lot_shoot_price = models.DecimalField(db_column='lot_shootprice', max_digits=13, decimal_places=2, null=True)
+    lot_inyard_date = models.DateField()
+    lot_checkout_date = models.DateField()
+    lot_photo = models.CharField(db_column='lot_eei_asset_photo_filename', null=True, max_length=48)
+    lot_asset_guid = models.UUIDField(editable=False)
+
+
+
 
     class Meta:
         db_table = 'GA_Lot'
@@ -33,3 +46,17 @@ class Customer(models.Model):
     def __str__(self):
         """string defn of class"""
         return '{} {} '.format(self.first_name, self.last_name)
+
+class Sale(models.Model):
+    """ Sale table"""
+    sale_number = models.IntegerField(null=False, primary_key=True, db_column='SV_SALENUM')
+    sale_office = models.CharField(null=True, max_length=50, db_column='SV_OFFICE')
+    sale_date = models.DateField(db_column='SV_SALEDATE')
+
+    class Meta:
+        db_table = 'GA_SaleVars'
+
+
+    def __str__(self):
+        """string defn of class"""
+        return 'sale {} '.format(self.sale_number)

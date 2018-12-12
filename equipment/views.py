@@ -1,7 +1,7 @@
 import django_filters.rest_framework
 from rest_framework import generics
-from .serializers import LotSerializer, CustomerSerializer
-from .models import Lot, Customer
+from .serializers import LotSerializer, CustomerSerializer, SaleSerializer
+from .models import Lot, Customer, Sale
 
 class LotsListView(generics.ListAPIView):
     """ Lot List View"""
@@ -24,4 +24,9 @@ class CustomerListView(generics.ListAPIView):
     """ Lot List View"""
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    #filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+
+
+class SaleListView(generics.ListAPIView):
+    """ Lot List View"""
+    queryset = Sale.objects.all()
+    serializer_class = SaleSerializer
