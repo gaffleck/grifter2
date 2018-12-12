@@ -92,16 +92,20 @@ WSGI_APPLICATION = 'djangorest.wsgi.application'
 
 DATABASES = {
     'default': {
-        
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')},
+    'equipment': {        
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': os.environ.get('DB_NAME', None),
-        'USER': os.environ.get('DB_USER', None),
-        'PASSWORD': os.environ.get('DB_PASS', None),
-        'HOST': os.environ.get('DB_HOST', None),
-        'PORT': os.environ.get('DB_PORT', None),
+        'NAME': os.environ.get('DB_NAME_EQUIPMENT', None),
+        'USER': os.environ.get('DB_USER_EQUIPMENT', None),
+        'PASSWORD': os.environ.get('DB_PASS_EQUIPMENT', None),
+        'HOST': os.environ.get('DB_HOST_EQUIPMENT', None),
+        'PORT': os.environ.get('DB_PORT_EQUIPMENT', None),
     }
 }
 
+#DB Routers
+DATABASE_ROUTERS = ['djangorest.dbrouter.EquipmentRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

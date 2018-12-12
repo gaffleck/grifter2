@@ -25,6 +25,7 @@ class Lot(models.Model):
 
     class Meta:
         db_table = 'GA_Lot'
+        managed = False
 
 
     def __str__(self):
@@ -48,6 +49,7 @@ class Customer(models.Model):
 
     class Meta:
         db_table = 'GA_Customer'
+        managed = False
 
 
     def __str__(self):
@@ -65,13 +67,23 @@ class Sale(models.Model):
     sale_city = models.CharField(db_column='SV_CITY', max_length=30)
     sale_province = models.CharField(db_column='SV_PROV', max_length=25)
     sale_country = models.CharField(db_column='SV_COUNTRY', max_length=25)
-    
+
 
 
     class Meta:
         db_table = 'GA_SaleVars'
+        managed = False
 
 
     def __str__(self):
         """string defn of class"""
         return 'sale {} '.format(self.sale_number)
+
+class WatchList(models.Model):
+    """ The stuff I want"""
+    lot_number = models.IntegerField()
+    max_price = models.IntegerField()
+    ask_price = models.IntegerField()
+
+    def __str__(self):
+        return "{} {}".format(self.lot_number, self.max_price)
