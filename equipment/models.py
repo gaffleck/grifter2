@@ -37,7 +37,14 @@ class Customer(models.Model):
     """ customer table"""
     first_name = models.CharField(null=True, max_length=75, db_column='CST_F_NAME')
     last_name = models.CharField(null=True, max_length=75, db_column='CST_L_NAME')
+    title = models.CharField(null=True, max_length=75, db_column='CST_TITLE')
     customer_number = models.IntegerField(primary_key=True, db_column='CST_RBANUM')
+    sale_number = models.IntegerField(db_column='CST_SALENUM')
+    company_name = models.CharField(db_column='CST_CONAME', max_length=150)
+    bidder_number = models.IntegerField(db_column='CST_BIDNUM', null=False)
+    country = models.CharField(db_column='CST_COUNTRY', max_length=3)
+    purchase_threshold = models.DecimalField(db_column='CST_PUR_THRESHOLD', max_digits=13, decimal_places=2, null=True)
+    customer_type = models.CharField(max_length=3, db_column='CST_CUSTOMER_TYPE')
 
     class Meta:
         db_table = 'GA_Customer'
@@ -52,6 +59,14 @@ class Sale(models.Model):
     sale_number = models.IntegerField(null=False, primary_key=True, db_column='SV_SALENUM')
     sale_office = models.CharField(null=True, max_length=50, db_column='SV_OFFICE')
     sale_date = models.DateField(db_column='SV_SALEDATE')
+    sale_days = models.IntegerField(db_column='SV_SALEDAYS')
+    sale_address = models.CharField(db_column='SV_ADDR1', max_length=30)
+    sale_address_2 = models.CharField(db_column='SV_ADDR2', max_length=30)
+    sale_city = models.CharField(db_column='SV_CITY', max_length=30)
+    sale_province = models.CharField(db_column='SV_PROV', max_length=25)
+    sale_country = models.CharField(db_column='SV_COUNTRY', max_length=25)
+    
+
 
     class Meta:
         db_table = 'GA_SaleVars'

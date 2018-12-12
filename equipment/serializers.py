@@ -14,11 +14,13 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('first_name', 'last_name', 'customer_number')
+        fields = ('first_name', 'last_name', 'customer_number', 'title', 'sale_number', 'company_name',\
+            'bidder_number', 'country', 'purchase_threshold', 'customer_type')
 
 class SaleSerializer(serializers.ModelSerializer):
     """Serialize the sale"""
 
     class Meta:
         model = Sale
-        fields = ('sale_number', 'sale_office', 'sale_date')
+        fields = ('sale_number', 'sale_office', 'sale_date', 'sale_days', 'sale_address', 'sale_address_2', \
+            'sale_city', 'sale_province', 'sale_country')
