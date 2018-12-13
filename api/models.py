@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 class User(models.Model):
     """ Customer Model Class"""
     first_name = models.CharField(max_length=255, blank=False, unique=False)
+    middle_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False, unique=False)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -35,6 +36,7 @@ class Contact(models.Model):
 class Note(models.Model):
     """ customer notes"""
     date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     content = models.CharField(max_length=1000)
     contact = models.ForeignKey(Contact, related_name='notes', on_delete=models.CASCADE)
 

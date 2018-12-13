@@ -1,8 +1,9 @@
 """API Views"""
 
 from rest_framework import generics
-from .serializers import UserSerializer, ContactSerializer
-from .models import User, Contact
+from .serializers import UserSerializer, ContactSerializer, NoteSerializer
+from .models import User, Contact, Note
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -36,3 +37,16 @@ class ContactDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
+
+class NoteCreateView(generics.ListCreateAPIView):
+    """This class defines the create behavior of our rest api."""
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class NoteDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Friend Details View"""
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
