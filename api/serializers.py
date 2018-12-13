@@ -71,13 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
             'date_modified', 'contacts')
         read_only_fields = ('date_created', 'date_modified')
 
-class ConversationSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-    
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Conversation
-        fields = ('id', 'user', 'contact', 'messages')
+
 
 class MessageSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -85,9 +79,18 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Message
-        fields = ('id', 'conversation', 'message', 'message_status')
+        fields = ('id', 'conversation', 'message')
         read_only_fields = ('date_created',)
 
+class ConversationSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    
+    messages = MessageSerializer(required=False, many=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Conversation
+        fields = ('id', 'user', 'contact', 'messages', 'asset')
 
  
 

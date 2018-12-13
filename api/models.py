@@ -71,6 +71,7 @@ class Conversation(models.Model):
     """ a conversation"""
     user = models.ForeignKey(User, related_name='conversations', on_delete=models.CASCADE)
     contact = models.ForeignKey(Contact, related_name='conversations', on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Conversation between {} and {} ".format(self.user.first_name, self.contact.first_name)
@@ -80,7 +81,8 @@ class Message(models.Model):
     conversation = models.ForeignKey(Conversation, related_name='messages', on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     message = models.CharField(max_length=1000, blank=False)
-    message_status = models.CharField(max_length=100, blank=False)
+    message_status = models.CharField(max_length=100, blank=False, default='UNSENT')
+    
 
     def __str__(self):
         return "Message {} ".format(self.message)

@@ -1,6 +1,8 @@
 """API Views"""
 
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .serializers import UserSerializer, ContactSerializer, NoteSerializer, \
     AssetSerializer, PurchaseSerializer, ConversationSerializer, MessageSerializer
 from .models import User, Contact, Note, Asset, Purchase, Conversation, Message
@@ -103,3 +105,16 @@ class MessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+
+class HandleMessagesView(APIView):
+    """
+    Handle pending messages
+    """
+    
+    def get(self, request, format=None):
+        """
+        Return a list of all users.
+        """
+        unsentMessages = Message.objects.all()
+
+        return Response("OK")
