@@ -25,61 +25,23 @@ class Contact(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, related_name='contacts', on_delete=models.CASCADE)
     image = models.CharField(max_length=255, blank=True, unique=False)
+    industry = models.CharField(max_length=255, blank=True)
+    quality = models.IntegerField()
 
     def __str__(self):
         """Return a human readable representation of the model instance."""
         return "{}".format(self.first_name)
 
-class SpecialDateType(models.Model):
-    """types of special Dates"""
-    date_type = models.CharField(max_length=255, blank=False)
+class Note(models.Model):
+    """ customer notes"""
+    date_created = models.DateTimeField(auto_now_add=True)
+    content = models.CharField(max_length=1000)
+    contact = models.ForeignKey(Contact, related_name='notes', on_delete=models.CASCADE)
 
     def __str__(self):
-        """types of special date"""
-        return "{}".format(self.date_type)
+        """Return a human readable representation of the model instance."""
+        return "{}".format(self.content)
 
-
-class SpecialDate(models.Model):
-    """Special Dates Class"""
-    contact = models.ForeignKey(Contact, related_name='special_dates', on_delete=models.CASCADE)
-    date = models.DateField()
-    date_type = models.ForeignKey(SpecialDateType, on_delete=models.CASCADE)
-
-
-    def __str__(self):
-        """return a human readable representation"""
-        return 'Special date for {} of {}'.format(self.contact.first_name, self.date)
-
-
-class Gift(models.Model):
-    """Gift Model Class """
-    gift_name = models.CharField(max_length=255, blank=False)
-    gift_description = models.CharField(max_length=1000, blank=True)
-    source = models.CharField(max_length=255, blank=False)
-    image = models.CharField(max_length=255, blank=True, unique=False)
-
-
-    def __str__(self):
-        return "{}".format(self.gift_name)
-
-class GiftRecord(models.Model):
-    """Record of a gift given"""
-    gift = models.ForeignKey(Gift, on_delete=models.CASCADE)
-    price = models.IntegerField()
-    date_given = models.DateTimeField()
-    contact = models.ForeignKey(Contact, related_name='gift_history', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "{}".format(self.gift.gift_name)
-
-class GiftSuggestion(models.Model):
-    """Gift Suggestion Class """
-    date_suggested = models.DateTimeField(auto_now=True)
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
-    gift = models.ForeignKey(Gift, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "gift suggestion of {0}".format(self.gift.gift_name)
 
 class Asset(models.Model):
     """Asset Class """
@@ -88,7 +50,23 @@ class Asset(models.Model):
     year = models.IntegerField(blank=True)
     equipment_type = models.CharField(max_length=255, blank=False)
 
+
     def __str__(self):
         return "Asset {} {} {}".format(self.make, self.model, self.year)
+
+class Purchase(models.Model):
+    """An asset purchase"""
+    price = models.DecimalField(decimal_places=2, max_digits=13)
+    contact = models.ForeignKey(Contact, related_name='purchases', on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, related_name='asset', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Purchase {} {} {}".format(self.asset.make, self.asset.model, self.price)
+
+
+
+
+
+
 
 

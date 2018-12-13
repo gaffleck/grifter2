@@ -1,8 +1,8 @@
 """API Views"""
 
 from rest_framework import generics
-from .serializers import UserSerializer, ContactSerializer, GiftRecordSerializer, GiftSerializer, GiftSuggestionSerializer, SpecialDateTypeSerializer, SpecialDateSerializer
-from .models import User, Contact, GiftRecord, Gift, GiftSuggestion, SpecialDateType, SpecialDate
+from .serializers import UserSerializer, ContactSerializer
+from .models import User, Contact
 import logging
 logger = logging.getLogger(__name__)
 
@@ -36,55 +36,3 @@ class ContactDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
-
-class GiftRecordCreateView(generics.ListCreateAPIView):
-    """view for rest API"""
-    queryset = GiftRecord.objects.all()
-    serializer_class = GiftRecordSerializer
-
-class GiftRecordDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    """CUD actions"""
-    queryset = GiftRecord.objects.all()
-    serializer_class = GiftRecordSerializer
-
-class GiftCreateView(generics.ListCreateAPIView):
-    """view for rest API"""
-    queryset = Gift.objects.all()
-    serializer_class = GiftSerializer
-
-class GiftDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    """CUD actions"""
-    queryset = Gift.objects.all()
-    serializer_class = GiftSerializer
-
-
-class GiftSuggestionDetailsView(generics.ListCreateAPIView):
-    """CUD Actions"""
-    queryset = GiftSuggestion.objects.all()
-    serializer_class = GiftSuggestionSerializer
-
-class GiftSuggestionCreateView(generics.ListCreateAPIView):
-    """CUD Actions"""
-    queryset = GiftSuggestion.objects.all()
-    serializer_class = GiftSuggestionSerializer
-
-class SpecialDateTypeDetailsView(generics.ListCreateAPIView):
-    """CUD Actions"""
-    queryset = SpecialDateType.objects.all()
-    serializer_class = SpecialDateTypeSerializer
-
-class SpecialDateTypeCreateView(generics.ListCreateAPIView):
-    """CUD Actions"""
-    queryset = SpecialDateType.objects.all()
-    serializer_class = SpecialDateTypeSerializer
-
-class SpecialDateDetailsView(generics.ListCreateAPIView):
-    """CUD Actions"""
-    queryset = SpecialDate.objects.all()
-    serializer_class = SpecialDateSerializer
-
-class SpecialDateCreateView(generics.ListCreateAPIView):
-    """CUD Actions"""
-    queryset = SpecialDate.objects.all()
-    serializer_class = SpecialDateSerializer
-
