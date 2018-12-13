@@ -2,8 +2,8 @@
 
 from rest_framework import generics
 from .serializers import UserSerializer, ContactSerializer, NoteSerializer, \
-    AssetSerializer, PurchaseSerializer
-from .models import User, Contact, Note, Asset, Purchase
+    AssetSerializer, PurchaseSerializer, ConversationSerializer, MessageSerializer
+from .models import User, Contact, Note, Asset, Purchase, Conversation, Message
 
 import logging
 logger = logging.getLogger(__name__)
@@ -77,3 +77,29 @@ class PurchaseDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
+
+class ConversationCreateView(generics.ListCreateAPIView):
+    """This class defines the create behavior of our rest api."""
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class ConversationDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Friend Details View"""
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer
+
+class MessageCreateView(generics.ListCreateAPIView):
+    """This class defines the create behavior of our rest api."""
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class MessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Friend Details View"""
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer

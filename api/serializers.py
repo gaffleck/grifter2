@@ -1,7 +1,7 @@
 # api/serializers.py
 """Serializers """
 from rest_framework import serializers
-from .models import User, Contact, Note, Asset, Purchase
+from .models import User, Contact, Note, Asset, Purchase, Conversation, Message
 
 class NoteSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -29,7 +29,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Purchase
         fields = ('id', 'price', 'contact', 'asset')
-    
+ 
 
 class ContactSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -70,6 +70,26 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'image', 'date_created', \
             'date_modified', 'contacts')
         read_only_fields = ('date_created', 'date_modified')
+
+class ConversationSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Conversation
+        fields = ('id', 'user', 'contact', 'messages')
+
+class MessageSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Message
+        fields = ('id', 'conversation', 'message', 'message_status')
+        read_only_fields = ('date_created',)
+
+
+ 
 
 
 

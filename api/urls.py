@@ -4,7 +4,8 @@ from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import UserCreateView, UserDetailsView , ContactCreateView,\
 ContactDetailsView, NoteCreateView, NoteDetailsView, AssetCreateView, AssetDetailsView,\
-PurchaseCreateView, PurchaseDetailsView
+PurchaseCreateView, PurchaseDetailsView, ConversationCreateView, ConversationDetailsView,\
+MessageCreateView, MessageDetailsView
 
 
 urlpatterns = {
@@ -22,7 +23,13 @@ urlpatterns = {
         AssetDetailsView.as_view(), name="details"),
     url('purchases/$', PurchaseCreateView.as_view(), name="create"),
     url('purchases/(?P<pk>[0-9]+)/$',
-        PurchaseDetailsView.as_view(), name="details")
+        PurchaseDetailsView.as_view(), name="details"),
+    url('conversations/$', ConversationCreateView.as_view(), name="create"),
+    url('conversations/(?P<pk>[0-9]+)/$',
+        ConversationDetailsView.as_view(), name="details"),
+    url('messages/$', MessageCreateView.as_view(), name="create"),
+    url('messages/(?P<pk>[0-9]+)/$',
+        MessageDetailsView.as_view(), name="details")
 
 
 }
