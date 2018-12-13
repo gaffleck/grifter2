@@ -51,6 +51,7 @@ class Asset(models.Model):
     model = models.CharField(max_length=255, blank=False)
     year = models.IntegerField(blank=True)
     equipment_type = models.CharField(max_length=255, blank=False)
+    shoot_price = models.DecimalField(decimal_places=2, max_digits=13)
 
 
     def __str__(self):
