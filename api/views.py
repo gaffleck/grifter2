@@ -9,6 +9,7 @@ from .serializers import UserSerializer, ContactSerializer, NoteSerializer, \
 from .models import User, Contact, Note, Asset, Purchase, Conversation, Message
 from rest_framework.decorators import api_view
 from twilio.rest import Client
+import os
 
 import logging
 logger = logging.getLogger(__name__)
@@ -136,12 +137,13 @@ class HandleMessagesView(APIView):
         unsent_messages = Message.objects.filter(message_status='UNSENT')
         
         res = "Sent Messages to "
+        account_sid = os.environ.get('ACCOUNT_SID')
+        message_sid = os.environ.get('MESSAGE_SID')
+        auth_token = os.environ.get('AUTH_TOKEN')
 
         for mes in unsent_messages:
             # Your Account Sid and Auth Token from twilio.com/console
-            account_sid = 'AC02c4085896504639e775449de83fe365'
-            message_sid = 'MGd627e2f9bc305bce2a2d525cc0831b07'
-            auth_token = 'df7b034f87af4d5374e4928c5794aa22'
+            
             client = Client(account_sid, auth_token)
 
             message = client.messages \
