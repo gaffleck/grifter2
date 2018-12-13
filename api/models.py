@@ -13,6 +13,7 @@ class User(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     image = models.CharField(max_length=255, blank=True, unique=False)
+    phone_number = models.CharField(max_length=20, blank=False)
 
     def __str__(self):
         """Return a human readable representation of the model instance."""
@@ -28,6 +29,7 @@ class Contact(models.Model):
     image = models.CharField(max_length=255, blank=True, unique=False)
     industry = models.CharField(max_length=255, blank=True)
     quality = models.IntegerField()
+    phone_number = models.CharField(max_length=20, blank=False)
 
     def __str__(self):
         """Return a human readable representation of the model instance."""

@@ -95,7 +95,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super(ConversationSerializer, self).to_representation(instance)
         representation['messages'] = MessageSerializer(instance.messages.all(), many=True).data
-        return representation 
+        return representation
  
 
 
