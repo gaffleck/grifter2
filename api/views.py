@@ -113,8 +113,14 @@ class HandleMessagesView(APIView):
     
     def get(self, request, format=None):
         """
-        Return a list of all users.
+        Send unsent messages
         """
-        unsentMessages = Message.objects.all()
+        unsent_messages = Message.objects.filter(message_status='UNSENT')
+        
+        res = " unsent"
 
-        return Response("OK")
+        for message in unsent_messages:
+            res += message.message
+            
+
+        return Response(res)

@@ -85,13 +85,17 @@ class MessageSerializer(serializers.ModelSerializer):
 class ConversationSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     
-    messages = MessageSerializer(required=False, many=True)
+    #messages = MessageSerializer(required=False, many=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Conversation
         fields = ('id', 'user', 'contact', 'messages', 'asset')
-
+   
+    def to_representation(self, instance):
+        representation = super(ConversationSerializer, self).to_representation(instance)
+        representation['messages'] = MessageSerializer(instance.messages.all(), many=True).data
+        return representation 
  
 
 
