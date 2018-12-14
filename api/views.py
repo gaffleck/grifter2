@@ -11,6 +11,7 @@ from .models import User, Contact, Note, Asset, Purchase, Conversation, Message,
     Image
 from rest_framework.decorators import api_view
 from twilio.rest import Client
+from twilio import twiml
 import os
 
 import logging
@@ -132,6 +133,10 @@ class TwilioReplyCreateView(generics.ListCreateAPIView):
     
     def perform_create(self, serializer):
         serializer.save()
+
+    def post(self, request, *args, **kwargs):
+        result = self.create(request, *args, **kwargs)
+        return Response("OK")
 
 class TwilioReplyDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
