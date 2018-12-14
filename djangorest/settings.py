@@ -29,9 +29,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'grifter2.herokuapp.com',
-    'localhost', 
+    'localhost',
     'twilio.com'
-
 ]
 
 REST_FRAMEWORK = {
