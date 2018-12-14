@@ -13,13 +13,6 @@ class NoteSerializer(serializers.ModelSerializer):
         read_only_fields = ('date_created', 'date_modified')
 
 
-class AssetSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Asset
-        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'shoot_price')
 
 class PurchaseSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -29,27 +22,12 @@ class PurchaseSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Purchase
         fields = ('id', 'price', 'contact', 'asset')
- 
-
-class ContactSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-    notes = NoteSerializer(required=False, many=True)
-    purchases = PurchaseSerializer(required=False, many=True)
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Contact
-        fields = ('id', 'first_name', 'last_name', 'user', 'image', \
-             'date_created', 'date_modified', 'industry', 'quality', 'notes',\
-            'purchases', 'phone_number')
-        read_only_fields = ('date_created', 'date_modified')
-    
-        
     
 
 class ContactSubSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     notes = NoteSerializer(required=False, many=True)
+    
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -57,18 +35,6 @@ class ContactSubSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'image', \
             'date_created', 'date_modified', 'industry', 'quality', 'notes',\
             'purchases', 'phone_number')      
-        read_only_fields = ('date_created', 'date_modified')
-
-class UserSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-    contacts = ContactSubSerializer(required=False, many=True)
-    
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = User
-        fields = ('id', 'first_name', 'last_name', 'image', 'phone_number', 'date_created', \
-            'date_modified', 'contacts')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -85,7 +51,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class ConversationSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     
-    #messages = MessageSerializer(required=False, many=True)
+    messages = MessageSerializer(required=False, many=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -96,8 +62,41 @@ class ConversationSerializer(serializers.ModelSerializer):
         representation = super(ConversationSerializer, self).to_representation(instance)
         representation['messages'] = MessageSerializer(instance.messages.all(), many=True).data
         return representation
- 
+
+class AssetSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    conversations = ConversationSerializer(required=False, many=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Asset
+        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'shoot_price', 'conversations')
+
+class ContactSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    notes = NoteSerializer(required=False, many=True)
+    purchases = PurchaseSerializer(required=False, many=True)
+    conversations = ConversationSerializer(required=False, many=True)
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Contact
+        fields = ('id', 'first_name', 'last_name', 'user', 'image', \
+             'date_created', 'date_modified', 'industry', 'quality', 'notes',\
+            'purchases', 'phone_number', 'conversations')
+        read_only_fields = ('date_created', 'date_modified')
 
 
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    contacts = ContactSubSerializer(required=False, many=True)
+    conversations = ConversationSerializer(required=False, many=True)    
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'image', 'phone_number', 'conversations', 'date_created', \
+            'date_modified', 'contacts')
+        read_only_fields = ('date_created', 'date_modified')
 
 
