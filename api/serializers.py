@@ -41,7 +41,7 @@ class ContactSerializer(serializers.ModelSerializer):
         model = Contact
         fields = ('id', 'first_name', 'last_name', 'user', 'image', \
              'date_created', 'date_modified', 'industry', 'quality', 'notes',\
-            'purchases')
+            'purchases', 'phone_number')
         read_only_fields = ('date_created', 'date_modified')
     
         
@@ -56,7 +56,7 @@ class ContactSubSerializer(serializers.ModelSerializer):
         model = Contact
         fields = ('id', 'first_name', 'last_name', 'image', \
             'date_created', 'date_modified', 'industry', 'quality', 'notes',\
-            'purchases')      
+            'purchases', 'phone_number')      
         read_only_fields = ('date_created', 'date_modified')
 
 class UserSerializer(serializers.ModelSerializer):
@@ -67,7 +67,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = User
-        fields = ('id', 'first_name', 'last_name', 'image', 'date_created', \
+        fields = ('id', 'first_name', 'last_name', 'image', 'phone_number', 'date_created', \
             'date_modified', 'contacts')
         read_only_fields = ('date_created', 'date_modified')
 
