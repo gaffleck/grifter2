@@ -63,15 +63,6 @@ class ConversationSerializer(serializers.ModelSerializer):
         representation['messages'] = MessageSerializer(instance.messages.all(), many=True).data
         return representation
 
-class AssetSerializer(serializers.ModelSerializer):
-    """Serializer to map the Model instance into JSON format."""
-    conversations = ConversationSerializer(required=False, many=True)
-
-    class Meta:
-        """Meta class to map serializer's fields with the model fields."""
-        model = Asset
-        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'shoot_price', 'conversations', 'images')
-
 class ImageSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     
@@ -80,6 +71,22 @@ class ImageSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Image
         fields = ('file_name','asset')
+
+
+class AssetSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    conversations = ConversationSerializer(required=False, many=True)
+
+    def to_representation(self, instance):
+        representation = super(AssetSerializer, self).to_representation(instance)
+        representation['images'] = ImageSerializer(instance.images.all(), many=True).data
+        return representation
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Asset
+        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'shoot_price', 'conversations', 'images')
+
 
 
 class ContactSerializer(serializers.ModelSerializer):
