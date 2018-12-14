@@ -6,8 +6,9 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from .serializers import UserSerializer, ContactSerializer, NoteSerializer, \
     AssetSerializer, PurchaseSerializer, ConversationSerializer, MessageSerializer, \
-    TwilioMessageSerializer
-from .models import User, Contact, Note, Asset, Purchase, Conversation, Message, TwilioMessage
+    TwilioMessageSerializer, ImageSerializer
+from .models import User, Contact, Note, Asset, Purchase, Conversation, Message, TwilioMessage,\
+    Image
 from rest_framework.decorators import api_view
 from twilio.rest import Client
 import os
@@ -110,6 +111,19 @@ class MessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+
+class ImageCreateView(generics.ListCreateAPIView):
+    """This class defines the create behavior of our rest api."""
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class ImageDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Friend Details View"""
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
 
 class TwilioReplyCreateView(generics.ListCreateAPIView):
     """ handle Twilio Messages""" 

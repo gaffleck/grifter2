@@ -6,7 +6,8 @@ from .views import UserCreateView, UserDetailsView , ContactCreateView,\
 ContactDetailsView, NoteCreateView, NoteDetailsView, AssetCreateView, AssetDetailsView,\
 PurchaseCreateView, PurchaseDetailsView, ConversationCreateView, ConversationDetailsView,\
 MessageCreateView, MessageDetailsView, TwilioReplyCreateView, \
-TwilioReplyDetailsView, TwilioMessageCreateView, TwilioMessageDetailsView
+TwilioReplyDetailsView, TwilioMessageCreateView, TwilioMessageDetailsView, ImageDetailsView, \
+ImageCreateView
 
 
 urlpatterns = {
@@ -31,6 +32,9 @@ urlpatterns = {
     url('messages/$', MessageCreateView.as_view(), name="create"),
     url('messages/(?P<pk>[0-9]+)/$',
         MessageDetailsView.as_view(), name="details"), 
+    url('images/$', ImageCreateView.as_view(), name="create"),
+    url('images/(?P<pk>[0-9]+)/$',
+        ImageDetailsView.as_view(), name="details"), 
     url('twilioReplies/$', TwilioReplyCreateView.as_view(), name="create"),
     url('twilioReplies/(?P<pk>[0-9]+)/$',
         TwilioReplyDetailsView.as_view(), name="details"),

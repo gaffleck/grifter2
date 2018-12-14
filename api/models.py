@@ -59,6 +59,15 @@ class Asset(models.Model):
     def __str__(self):
         return "Asset {} {} {}".format(self.make, self.model, self.year)
 
+
+class Image(models.Model):
+    file_name = models.CharField(max_length=50)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='images')
+
+    def __str__(self):
+        return "image {}".format(self.fileName)
+
+
 class Purchase(models.Model):
     """An asset purchase"""
     price = models.DecimalField(decimal_places=2, max_digits=13)

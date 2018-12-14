@@ -1,7 +1,7 @@
 # api/serializers.py
 """Serializers """
 from rest_framework import serializers
-from .models import User, Contact, Note, Asset, Purchase, Conversation, Message, TwilioMessage
+from .models import User, Contact, Note, Asset, Purchase, Conversation, Message, TwilioMessage, Image
 
 class NoteSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -70,7 +70,17 @@ class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Asset
-        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'shoot_price', 'conversations')
+        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'shoot_price', 'conversations', 'images')
+
+class ImageSerializer(serializers.ModelSerializer):
+    """Serializer to map the Model instance into JSON format."""
+    
+
+    class Meta:
+        """Meta class to map serializer's fields with the model fields."""
+        model = Image
+        fields = ('file_name','asset')
+
 
 class ContactSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
