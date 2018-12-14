@@ -91,13 +91,26 @@ class Message(models.Model):
 
 class TwilioMessage(models.Model):
     """ A Twilio Message"""
+    ApiVersion = models.CharField(max_length=100)
+    MessagingServiceSid = models.CharField(max_length=40)
+    SmsSid = models.CharField(max_length=40)
+    SmsStatus = models.CharField(max_length=40)
+    SmsMessageSid = models.CharField(max_length=40)
+    NumSegments = models.IntegerField()
+    From = models.CharField(max_length=40)
+    ToState = models.CharField(max_length=5)
     MessageSid = models.CharField(max_length=40)
     AccountSid = models.CharField(max_length=40)
-    MessagingServiceSid = models.CharField(max_length=40)
-    From = models.CharField(max_length=40)
+    ToZip = models.CharField(max_length=20)
+    FromCountry = models.CharField(max_length=100)
+    ToCity = models.CharField(max_length=100)
+    FromCity = models.CharField(max_length=100)
     To = models.CharField(max_length=40)
+    FromZip = models.CharField(max_length=100)
     Body = models.CharField(max_length=40)
-
+    ToCountry = models.CharField(max_length=100)
+    FromState = models.CharField(max_length=100)
+    NumMedia = models.IntegerField()
 
 
 

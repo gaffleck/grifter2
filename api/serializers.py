@@ -103,6 +103,9 @@ class TwilioMessageSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = TwilioMessage
-        fields = ('MessageSid', 'AccountSid', 'MessagingServiceSid', 'From', 'To', 'Body')
+        fields = ('ApiVersion', 'MessagingServiceSid', 'SmsSid', 'SmsStatus',\
+            'SmsMessageSid', 'NumSegments', 'From', 'ToState', 'MessageSid',\
+            'AccountSid', 'ToZip', 'FromCountry', 'ToCity', 'FromCity', 'To',\
+            'FromZip', 'Body', 'ToCountry', 'FromState', 'NumMedia')
 
  
