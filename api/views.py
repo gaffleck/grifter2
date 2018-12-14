@@ -111,6 +111,19 @@ class MessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
+class TwilioReplyCreateView(generics.ListCreateAPIView):
+    """ handle Twilio Messages""" 
+    queryset = TwilioMessage.objects.all()
+    serializer_class = TwilioMessageSerializer
+    
+    def perform_create(self, serializer):
+        serializer.save()
+
+class TwilioReplyDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Friend Details View"""
+    queryset = TwilioMessage.objects.all()
+    serializer_class = TwilioMessageSerializer
+
 class TwilioMessageCreateView(generics.ListCreateAPIView):
     """ handle Twilio Messages""" 
     queryset = TwilioMessage.objects.all()

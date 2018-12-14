@@ -5,7 +5,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from .views import UserCreateView, UserDetailsView , ContactCreateView,\
 ContactDetailsView, NoteCreateView, NoteDetailsView, AssetCreateView, AssetDetailsView,\
 PurchaseCreateView, PurchaseDetailsView, ConversationCreateView, ConversationDetailsView,\
-MessageCreateView, MessageDetailsView, HandleMessagesView, TwilioMessageCreateView, TwilioMessageDetailsView
+MessageCreateView, MessageDetailsView, HandleMessagesView, TwilioReplyCreateView, \
+TwilioReplyDetailsView
 
 
 urlpatterns = {
@@ -31,9 +32,9 @@ urlpatterns = {
     url('messages/(?P<pk>[0-9]+)/$',
         MessageDetailsView.as_view(), name="details"), 
     url('handlemessages', HandleMessagesView.as_view(), name="Handle queued messages"),
-    url('twillioMessages/$', TwilioMessageCreateView.as_view(), name="create"),
-    url('twillioMessages/(?P<pk>[0-9]+)/$',
-        TwilioMessageDetailsView.as_view(), name="details"), 
+    url('twilioReplies/$', TwilioReplyCreateView.as_view(), name="create"),
+    url('twilioReplies/(?P<pk>[0-9]+)/$',
+        TwilioReplyDetailsView.as_view(), name="details"),
 
 
 }
