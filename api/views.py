@@ -156,9 +156,12 @@ class HandleMessagesView(APIView):
                message.sid)
             
             #check the status
-            mes.status = ''
+            mes.message_status = 'SENT'
+            mes.save()
 
             print(message.sid)
+        
+        
             
 
         return Response(res)
