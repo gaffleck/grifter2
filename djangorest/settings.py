@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'djangorest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'dbhack.sqlite3')}
+        'NAME': os.path.join(BASE_DIR, 'db2.sqlite3')}
 }
 
 # Password validation
