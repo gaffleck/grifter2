@@ -120,6 +120,7 @@ class TwilioMessage(models.Model):
     ToCountry = models.CharField(max_length=100, blank=True, null=True)
     FromState = models.CharField(max_length=100, blank=True, null=True)
     NumMedia = models.IntegerField(blank=True, null=True)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='text_messages', null=True)
 
 
 

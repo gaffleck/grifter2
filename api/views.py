@@ -11,7 +11,7 @@ from .models import User, Contact, Note, Asset, Purchase, Conversation, Message,
     Image
 from rest_framework.decorators import api_view
 from twilio.rest import Client
-from twilio import twiml
+from twilio.twiml.messaging_response import MessagingResponse
 import os
 
 import logging
@@ -132,10 +132,17 @@ class TwilioReplyCreateView(generics.ListCreateAPIView):
     serializer_class = TwilioMessageSerializer
     
     def perform_create(self, serializer):
+        contact = Contact.objects.all().filter(phone_number=serializer.validated_data.get('To')).first()
+        
+        #twmsg = TwilioMessage(data=serializer.validated_data)
+        if(contact is not None):
+            #twmsg.contact_id = contact.id
+            serializer.validated_data['contact_id'] = contact.id
         serializer.save()
 
     def post(self, request, *args, **kwargs):
         result = self.create(request, *args, **kwargs)
+        resp = MessagingResponse()
         return Response("OK")
 
 class TwilioReplyDetailsView(generics.RetrieveUpdateDestroyAPIView):
@@ -152,6 +159,13 @@ class TwilioMessageCreateView(generics.ListCreateAPIView):
         account_sid = os.environ.get('ACCOUNT_SID')
         message_sid = os.environ.get('MESSAGE_SID')
         auth_token = os.environ.get('AUTH_TOKEN')
+        contact = Contact.objects.all().filter(phone_number=serializer.validated_data.get('To')).first()
+        
+        #twmsg = TwilioMessage(data=serializer.validated_data)
+        if(contact is not None):
+            #twmsg.contact_id = contact.id
+            serializer.validated_data['contact_id'] = contact.id
+
 
         client = Client(account_sid, auth_token)
 
@@ -161,6 +175,7 @@ class TwilioMessageCreateView(generics.ListCreateAPIView):
                 to=serializer.validated_data.get('To'),
                 messaging_service_sid=message_sid)
         serializer.save()
+        #twmsg.save()
 
 class TwilioMessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""

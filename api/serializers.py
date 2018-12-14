@@ -100,7 +100,7 @@ class ContactSerializer(serializers.ModelSerializer):
         model = Contact
         fields = ('id', 'first_name', 'last_name', 'user', 'image', \
              'date_created', 'date_modified', 'industry', 'quality', 'notes',\
-            'purchases', 'phone_number', 'conversations')
+            'purchases', 'phone_number', 'conversations', 'text_messages')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -123,6 +123,7 @@ class TwilioMessageSerializer(serializers.ModelSerializer):
         fields = ('ApiVersion', 'MessagingServiceSid', 'SmsSid', 'SmsStatus',\
             'SmsMessageSid', 'NumSegments', 'From', 'ToState', 'MessageSid',\
             'AccountSid', 'ToZip', 'FromCountry', 'ToCity', 'FromCity', 'To',\
-            'FromZip', 'Body', 'ToCountry', 'FromState', 'NumMedia')
+            'FromZip', 'Body', 'ToCountry', 'FromState', 'NumMedia', 'contact')
+        depth = 1
 
  
