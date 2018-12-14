@@ -130,52 +130,20 @@ class TwilioMessageCreateView(generics.ListCreateAPIView):
     serializer_class = TwilioMessageSerializer
     
     def perform_create(self, serializer):
+        account_sid = os.environ.get('ACCOUNT_SID')
+        message_sid = os.environ.get('MESSAGE_SID')
+        auth_token = os.environ.get('AUTH_TOKEN')
+
+        client = Client(account_sid, auth_token)
+
+        message = client.messages \
+            .create(
+                body=serializer.validated_data.get('Body'),
+                to=serializer.validated_data.get('To'),
+                messaging_service_sid=message_sid)
         serializer.save()
 
 class TwilioMessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = TwilioMessage.objects.all()
     serializer_class = TwilioMessageSerializer
-
-class HandleMessagesView(APIView):
-    """
-    Handle pending messages
-    """
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
-
-    def get(self, request, format=None):
-        """
-        Send unsent messages
-        """
-        unsent_messages = Message.objects.filter(message_status='UNSENT')
-        
-        res = "Sent Messages to "
-        account_sid = os.environ.get('ACCOUNT_SID')
-        message_sid = os.environ.get('MESSAGE_SID')
-        auth_token = os.environ.get('AUTH_TOKEN')
-
-        for mes in unsent_messages:
-            # Your Account Sid and Auth Token from twilio.com/console
-            
-            client = Client(account_sid, auth_token)
-
-            message = client.messages \
-                            .create(
-                                 body=mes.message,
-                                 to= mes.conversation.contact.phone_number,
-                                 messaging_service_sid= message_sid
-                             )
-            res += " to {} sid {}".format(mes.conversation.contact.phone_number,\
-               message.sid)
-            
-            #check the status
-            mes.message_status = 'SENT'
-            mes.save()
-
-            print(message.sid)
-        
-        
-            
-
-        return Response(res)
