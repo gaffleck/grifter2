@@ -5,8 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from .serializers import UserSerializer, ContactSerializer, NoteSerializer, \
-    AssetSerializer, PurchaseSerializer, ConversationSerializer, MessageSerializer
-from .models import User, Contact, Note, Asset, Purchase, Conversation, Message
+    AssetSerializer, PurchaseSerializer, ConversationSerializer, MessageSerializer, \
+    TwilioMessageSerializer
+from .models import User, Contact, Note, Asset, Purchase, Conversation, Message, TwilioMessage
 from rest_framework.decorators import api_view
 from twilio.rest import Client
 import os
@@ -110,18 +111,18 @@ class MessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
-class MessageStatusView(CreateAPIView):
-    """ get status messages from Twilio """
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
+class TwilioMessageCreateView(generics.ListCreateAPIView):
+    """ handle Twilio Messages""" 
+    queryset = TwilioMessage.objects.all()
+    serializer_class = TwilioMessageSerializer
+    
+    def perform_create(self, serializer):
+        serializer.save()
 
-    def create(self, request, *args, **kwargs):
-        #serializer = self.get_serializer(data=request.data)
-        #serializer.is_valid(raise_exception=True)
-        #self.perform_create(serializer)
-        #headers = self.get_success_headers(serializer.data)
-        #return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)       
-        return Response('OK')
+class TwilioMessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """ Friend Details View"""
+    queryset = TwilioMessage.objects.all()
+    serializer_class = TwilioMessageSerializer
 
 class HandleMessagesView(APIView):
     """

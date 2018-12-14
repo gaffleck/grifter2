@@ -1,7 +1,7 @@
 # api/serializers.py
 """Serializers """
 from rest_framework import serializers
-from .models import User, Contact, Note, Asset, Purchase, Conversation, Message
+from .models import User, Contact, Note, Asset, Purchase, Conversation, Message, TwilioMessage
 
 class NoteSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -50,7 +50,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class ConversationSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
-    
+
     messages = MessageSerializer(required=False, many=True)
 
     class Meta:
@@ -99,4 +99,10 @@ class UserSerializer(serializers.ModelSerializer):
             'date_modified', 'contacts')
         read_only_fields = ('date_created', 'date_modified')
 
+class TwilioMessageSerializer(serializers.ModelSerializer):
 
+    class Meta: 
+        model = TwilioMessage
+        fields = ('MessageSid', 'AccountSid', 'MessagingServiceSid', 'From', 'To', 'Body')
+
+ 

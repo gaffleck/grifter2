@@ -89,6 +89,14 @@ class Message(models.Model):
     def __str__(self):
         return "Message {} ".format(self.message)
 
+class TwilioMessage(models.Model):
+    """ A Twilio Message"""
+    MessageSid = models.CharField(max_length=40)
+    AccountSid = models.CharField(max_length=40)
+    MessagingServiceSid = models.CharField(max_length=40)
+    From = models.CharField(max_length=40)
+    To = models.CharField(max_length=40)
+    Body = models.CharField(max_length=40)
 
 
 
