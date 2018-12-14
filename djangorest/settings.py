@@ -92,8 +92,13 @@ WSGI_APPLICATION = 'djangorest.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db2.sqlite3')}
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME_APP'),
+        'USER': os.environ.get('DB_USER_APP'),
+        'PASSWORD': os.environ.get('DB_PASS_APP'),
+        'HOST': os.environ.get('DB_HOST_APP'),
+        'PORT': os.environ.get('DB_PORT_APP'),
+        }
 }
 
 # Password validation
