@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
+
 from .serializers import UserSerializer, ContactSerializer, NoteSerializer, \
     AssetSerializer, PurchaseSerializer, ConversationSerializer, MessageSerializer, \
     TwilioMessageSerializer, ImageSerializer
@@ -181,3 +182,5 @@ class TwilioMessageDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """ Friend Details View"""
     queryset = TwilioMessage.objects.all()
     serializer_class = TwilioMessageSerializer
+
+
