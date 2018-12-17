@@ -54,6 +54,7 @@ class Asset(models.Model):
     year = models.IntegerField(blank=True)
     equipment_type = models.CharField(max_length=255, blank=False)
     shoot_price = models.IntegerField(blank=True)
+    on_watchlist = models.BooleanField(default=False)
 
 
     def __str__(self):
