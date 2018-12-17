@@ -85,7 +85,7 @@ class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Asset
-        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'shoot_price', 'conversations', 'images')
+        fields = ('id', 'make', 'model', 'year', 'equipment_type', 'on_watchlist', 'shoot_price', 'conversations', 'images')
 
 
 
