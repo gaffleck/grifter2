@@ -110,3 +110,6 @@ dev_settings.py
 .vscode
 
 schemas
+
+#executables
+*.exe
