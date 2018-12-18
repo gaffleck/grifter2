@@ -17,7 +17,7 @@ from selenium.webdriver.common.by import By
 
 chrome_options = Options()  
 chrome_options.add_argument('--headless')
-path = os.environ.get('GOOGLE_CHROME_BIN')
+path = os.environ.get('GOOGLE_CHROME_SHIM')
 if(path is None):
     path = os.path.abspath('chromedriver')
 driver = webdriver.Chrome(executable_path=path,   chrome_options=chrome_options)  
