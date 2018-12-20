@@ -49,7 +49,7 @@ def fetch_data(url):
 
             titles += result.text
 
-        return len(results)
+        return 'Finished processing {}'.format(len(results))
 
     except TimeoutException as ex:
         logger.error('timed out')
