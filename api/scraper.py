@@ -51,13 +51,13 @@ def fetch_data(url):
 
         return len(results)
 
-    except TimeoutException:
+    except TimeoutException as ex:
         logger.error('timed out')
-        return 0
+        return ex
     
-    except Exception:
+    except Exception as ex:
         logger.error('Exception')
-        return 0
+        return ex
 
 def empty_queue(request):
     jobs = q.jobs
@@ -67,7 +67,7 @@ def empty_queue(request):
 def load_assets(request):
     url = os.environ.get('BASE_URL') 
     job = q.enqueue(fetch_data, url, timeout='3m')
-
+pyt
     return HttpResponse(content= 'job {}'.format(job.id), status=201)
 
 
