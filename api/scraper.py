@@ -67,7 +67,7 @@ def empty_queue(request):
 def load_assets(request):
     url = os.environ.get('BASE_URL') 
     job = q.enqueue(fetch_data, url, timeout='3m')
-pyt
+
     return HttpResponse(content= 'job {}'.format(job.id), status=201)
 
 
