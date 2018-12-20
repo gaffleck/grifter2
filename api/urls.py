@@ -9,7 +9,7 @@ MessageCreateView, MessageDetailsView, TwilioReplyCreateView, \
 TwilioReplyDetailsView, TwilioMessageCreateView, TwilioMessageDetailsView, ImageDetailsView, \
 ImageCreateView
 
-from .scraper import load_assets, get_job_statuses, empty_queue
+from .scraper import load_assets
 
 
 urlpatterns = {
@@ -37,9 +37,9 @@ urlpatterns = {
     url('twilioMessages/$', TwilioMessageCreateView.as_view(), name="create"),
     url('twilioMessages/(?P<pk>[0-9]+)/$',
         TwilioMessageDetailsView.as_view(), name="details"),
-    url('loadAssets/', load_assets), 
-    url('loadAssetsStatus/', get_job_statuses),
-    url('emptyQueue/', empty_queue)
+    url('loadAssets/', load_assets)
+    
+    
 
 
 }
