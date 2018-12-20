@@ -53,11 +53,11 @@ def fetch_data(url):
 
     except TimeoutException as ex:
         logger.error('timed out')
-        return ex
+        return 'timeout error '+ex.stacktrace
     
     except Exception as ex:
         logger.error('Exception')
-        return ex
+        return 'other error '+ex.stacktrace
 
 
 def load_assets(request):
