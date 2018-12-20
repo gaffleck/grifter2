@@ -30,7 +30,7 @@ driver = webdriver.Chrome(executable_path=path, chrome_options=chrome_options)
 
 def fetch_data(url):
     logger.debug('fetching data')
-    timeout = 10
+    timeout = 100
     driver.get(url)
     try:
         element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ'))
@@ -53,7 +53,7 @@ def fetch_data(url):
 
     except TimeoutException as ex:
         logger.error('timed out')
-        return 'timeout error '+ex.stacktrace
+        return 'timeout error {} '.format(ex.stacktrace)
     
     except Exception as ex:
         logger.error('Exception')
