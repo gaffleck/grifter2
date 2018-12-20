@@ -49,12 +49,14 @@ class Note(models.Model):
 
 class Asset(models.Model):
     """Asset Class """
-    make = models.CharField(max_length=255, blank=False)
-    model = models.CharField(max_length=255, blank=False)
-    year = models.IntegerField(blank=True)
-    equipment_type = models.CharField(max_length=255, blank=False)
-    shoot_price = models.IntegerField(blank=True)
+    make = models.CharField(max_length=255, blank=True)
+    model = models.CharField(max_length=255, blank=True)
+    year = models.IntegerField(null=True)
+    equipment_type = models.CharField(max_length=255, blank=True)
+    shoot_price = models.IntegerField(null=True)
     on_watchlist = models.BooleanField(default=False)
+    title = models.CharField(max_length=255, blank=True)
+    thumbnail_image = models.CharField(max_length=255, blank=True)
 
 
     def __str__(self):
