@@ -5,7 +5,6 @@ from requests.exceptions import RequestException
 from contextlib import closing
 from selenium import webdriver
 from django.http import HttpResponse
-from .models import Asset
 from selenium import webdriver  
 from selenium.webdriver.common.keys import Keys  
 from selenium.webdriver.chrome.options import Options  
@@ -13,15 +12,23 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from rq import Queue
+from .worker import conn
+import logging 
+
+from .models import Asset
+logger = logging.getLogger(__name__)
+
 
 chrome_options = Options()  
 chrome_options.add_argument('--headless')
 path = os.environ.get('CHROME_DRIVER_PATH')
 driver = webdriver.Chrome(executable_path=path,   chrome_options=chrome_options)  
+q= Queue(connection=conn)
 
 
-def load_assets(request):
-    url = os.environ.get('BASE_URL')
+def fetch_data(url):
+    logger.debug('fetching data')
     timeout = 10
     driver.get(url)
     try:
@@ -29,6 +36,7 @@ def load_assets(request):
         WebDriverWait(driver, timeout).until(element_present)
         results = driver.find_elements_by_css_selector('.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ')
         titles = "count: {} \n titles:".format(len(results))
+        logger.debug('got titles {}'.format(titles))
         for result in results:
             id = result.get_attribute("id").split('_')[0]
             if Asset.objects.filter(id=id).count() is 0:
@@ -40,12 +48,36 @@ def load_assets(request):
 
             titles += result.text
 
-        return HttpResponse(content=titles, status=201)
+        return len(results)
 
     except TimeoutException:
-        
-        return HttpResponse(content='Timed out', status=500)
+        logger.error('timed out')
+        return 0
     
+    except Exception:
+        logger.error('Exception')
+        return 0
+
+def empty_queue(request):
+    jobs = q.jobs
+    q.delete(delete_jobs=True)
+    return HttpResponse(content='deleted jobs {}'.format(jobs), status=201)
+
+def load_assets(request):
+    url = os.environ.get('BASE_URL') 
+    job = q.enqueue(fetch_data, url, timeout='3m')
+
+    return HttpResponse(content= 'job {}'.format(job.id), status=201)
+
+
+def get_job_statuses(request):
+    jobs = q.jobs
+    result = ''
+    for job in jobs:
+        result+= 'id:{} status:{} <br/>'.format(job.id, job.get_status())
+
+    return HttpResponse(content= result, status=201)
+
 
 
 
