@@ -12,19 +12,20 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from rq import Queue
-from .worker import conn
+import django_rq
+
 import logging 
 
 from .models import Asset
 logger = logging.getLogger(__name__)
 
+q = django_rq.get_queue('default', is_async=True)
 
 chrome_options = Options()  
 chrome_options.add_argument('--headless')
 path = os.environ.get('CHROME_DRIVER_PATH')
-driver = webdriver.Chrome(executable_path=path,   chrome_options=chrome_options)  
-q= Queue(connection=conn)
+driver = webdriver.Chrome(executable_path=path, chrome_options=chrome_options)  
+
 
 
 def fetch_data(url):

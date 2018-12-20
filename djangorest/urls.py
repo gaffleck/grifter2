@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('equipment/', include('equipment.urls')),
     path('', get_swagger_view(title='Grifter UI')),
+    path('django-rq/', include('django_rq.urls')),
     ]

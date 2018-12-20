@@ -51,8 +51,16 @@ INSTALLED_APPS = [
     'api',
     'equipment',
     'rest_framework_swagger',
-    'corsheaders'
+    'corsheaders', 
+    'django_rq'
 ]
+
+RQ_QUEUES = {
+    'default': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'DEFAULT_TIMEOUT': 500,
+    }
+}
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
