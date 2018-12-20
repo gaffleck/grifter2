@@ -49,14 +49,14 @@ class Note(models.Model):
 
 class Asset(models.Model):
     """Asset Class """
-    make = models.CharField(max_length=255, blank=True)
-    model = models.CharField(max_length=255, blank=True)
+    make = models.CharField(max_length=255, null=True)
+    model = models.CharField(max_length=255, null=True)
     year = models.IntegerField(null=True)
-    equipment_type = models.CharField(max_length=255, blank=True)
+    equipment_type = models.CharField(max_length=255, null=True)
     shoot_price = models.IntegerField(null=True)
     on_watchlist = models.BooleanField(default=False)
-    title = models.CharField(max_length=255, blank=True)
-    thumbnail_image = models.CharField(max_length=255, blank=True)
+    title = models.CharField(max_length=255, null=True)
+    thumbnail_image = models.CharField(max_length=255, null=True)
 
 
     def __str__(self):
@@ -64,8 +64,9 @@ class Asset(models.Model):
 
 
 class Image(models.Model):
-    file_name = models.CharField(max_length=50)
+    file_name = models.CharField(max_length=255)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='images')
+    sectionName = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return "image {}".format(self.fileName)
