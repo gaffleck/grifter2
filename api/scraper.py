@@ -148,7 +148,7 @@ def load_assets(request):
     event_location = request.GET.get('location')
     event_name = request.GET.get('event_name')
     url = generate_url(event_location,event_name)
-    job = q.enqueue(fetch_data, url, timeout='3m')
+    job = q.enqueue(fetch_data, url, timeout='15m')
 
     return HttpResponse(content= 'job {}'.format(job.id), status=201)
 
