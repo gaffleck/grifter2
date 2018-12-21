@@ -93,6 +93,7 @@ def fetch_data(url):
             urls.append(res.get_attribute('href'))
         
         logger.debug('got titles {}'.format(len(results)))
+        sale_num = None
         index = 1
         for url in urls:
             #go to detail page
@@ -102,19 +103,25 @@ def fetch_data(url):
             
             asset_id = parse_qs(urlparse(url).query)['invId'][0]
             asses = Asset.objects.filter(id=asset_id)
+
+            if(sale_num is None):
+                sale_key = parse_qs(urlparse(url).query)['auction'][0]
+                sale_num = int(sale_key.split('-')[2])
             if(len(asses) is 0):
                 ass = Asset()
+                ass.id = asset_id
             else:
                 ass = asses.first()
-                ass.id = asset_id
+                
             ass.year = get_value(driver, '[data-key="AS400YearOfManufacture"] .static-value')
             ass.make = get_value(driver, '[data-key="AS400ManufacturerName"] .static-value')
             ass.model = get_value(driver, '[data-key="AS400ModelName"] .static-value')
             ass.serial_number = get_value(driver, '[data-key="AS400SerialOrVehicleIdNumber"] .static-value')
+            ass.usage = get_value(driver, '[data-key="AS400Odometer"] .static-value')
             ass.equipment_type = get_value(driver, '[data-key="AS400AssetType"] .static-value') 
             ass.comes_with = get_value(driver, '[data-key="CW"] .static-value') 
             ass.catalog_notes = get_value(driver, '[data-key="CatalogNotes"] .static-value') 
-            
+            ass.sale_number = sale_num
             ass.title = get_value(driver, 'h1')
             ass.save()
 

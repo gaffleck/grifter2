@@ -61,6 +61,7 @@ class Asset(models.Model):
     on_watchlist = models.BooleanField(default=False)
     title = models.CharField(max_length=255, null=True)
     thumbnail_image = models.CharField(max_length=255, null=True)
+    sale_number = models.IntegerField(blank=True)
 
 
     def __str__(self):
