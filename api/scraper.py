@@ -22,8 +22,11 @@ import logging
 from .models import Asset, Image
 logger = logging.getLogger(__name__)
 
-IS_HEROKU = os.environ.get('IS_HEROKU') == '1'
-q = django_rq.get_queue('default', is_async=IS_HEROKU)
+IS_DEV = os.environ.get('IS_DEV')
+if(IS_DEV is not None):
+    q = django_rq.get_queue('default', is_async=False)
+else:
+    q = django_rq.get_queue('default')
 
 
 chrome_options = Options()  
