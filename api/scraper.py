@@ -14,6 +14,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import django_rq
 import urllib
+import time
+from urllib.parse import urlparse, parse_qs
 
 import logging 
 
@@ -26,8 +28,9 @@ chrome_options = Options()
 chrome_options.add_argument('--headless')
 path = os.environ.get('CHROME_DRIVER_PATH')
 driver = webdriver.Chrome(executable_path=path, chrome_options=chrome_options)  
+TIMEOUT = 20
 
-def get_value(driver,selector, default_value = None):
+def get_value(driver,selector, default_value=None):
     try:
         element = driver.find_element_by_css_selector(selector)
         return element.text
@@ -35,36 +38,84 @@ def get_value(driver,selector, default_value = None):
         return default_value 
 
 
+def get_all_asset_urls(url):
+    #keep scrolling until you get them all
+    driver.get(url)
+    element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ'))
+    WebDriverWait(driver, TIMEOUT).until(element_present)
+    SCROLL_PAUSE_TIME = 1
+
+    # Get scroll height
+    last_height = driver.execute_script("return document.body.scrollHeight")
+
+    while True:
+        # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        try:
+            button = driver.find_element_by_css_selector('.sc-gzVnrw.jGVaKU')
+            if(button is not None):
+                button.click()
+        
+        except NoSuchElementException as ex:
+            pass
+        
+        # Wait to load page
+        time.sleep(SCROLL_PAUSE_TIME)
+        #.sc-hrWEMg .bOHRUD
+        element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '.sc-hrWEMg.bOHRUD'))
+        WebDriverWait(driver, TIMEOUT).until_not(element_present)
+    
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        
+        if new_height == last_height:
+            break
+        last_height = new_height
+
+
+    results = driver.find_elements_by_css_selector('.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ h3 a')
+    return results
 
 def fetch_data(url):
     logger.debug('fetching data')
-    timeout = 20
+    
     
     try:
-        driver.get(url)
-        element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ'))
-        WebDriverWait(driver, timeout).until(element_present)
-        results = driver.find_elements_by_css_selector('.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ')
+        
+        results = get_all_asset_urls(url)
+        urls = []
+        for res in results:
+            urls.append(res.get_attribute('href'))
         
         logger.debug('got titles {}'.format(len(results)))
-        index = 4
-        for result in results:
+        index = 1
+        for url in urls:
             #go to detail page
-            elem = driver.find_element_by_css_selector('#searchResultsList div:nth-child({}) h3'.format(index))
-            elem.click()
+            driver.get(url)
             element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '#p_p_id_searchitemdetail_WAR_rbaportlet_'))
-            WebDriverWait(driver, timeout).until(element_present)
-            section = 'general'
-
-            ass = Asset()
+            WebDriverWait(driver, TIMEOUT).until(element_present)
+            
+            asset_id = parse_qs(urlparse(url).query)['invId'][0]
+            asses = Asset.objects.filter(id=asset_id)
+            if(len(asses) is 0):
+                ass = Asset()
+            else:
+                ass = asses.first()
+                ass.id = asset_id
             ass.year = get_value(driver, '[data-key="AS400YearOfManufacture"] .static-value')
             ass.make = get_value(driver, '[data-key="AS400ManufacturerName"] .static-value')
-            ass.model = get_value(driver, '[data-key="AS400ModelName"] .static-value') 
+            ass.model = get_value(driver, '[data-key="AS400ModelName"] .static-value')
+            ass.serial_number = get_value(driver, '[data-key="AS400SerialOrVehicleIdNumber"] .static-value')
+            ass.equipment_type = get_value(driver, '[data-key="AS400AssetType"] .static-value') 
+            ass.comes_with = get_value(driver, '[data-key="CW"] .static-value') 
+            ass.catalog_notes = get_value(driver, '[data-key="CatalogNotes"] .static-value') 
+            
             ass.title = get_value(driver, 'h1')
             ass.save()
 
 
             images = driver.find_elements_by_css_selector('.item-details-carousel-container img')
+            section = 'general'
             for img_file in images:
                 img = Image()
                 img.asset_id = ass.id
@@ -73,15 +124,6 @@ def fetch_data(url):
                 #TODO: bulk save?
                 img.save()
             index = index+1
-            driver.back()
-            element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ'))
-            WebDriverWait(driver, timeout).until(element_present)
-
-            
-            
-                
-
-            
 
         return 'Finished processing {}'.format(len(results))
 
@@ -91,7 +133,7 @@ def fetch_data(url):
     
     except BaseException as ex:
         logger.error('Exception')
-        return 'other error {}'.format(ex.msg)
+        return 'other error {}'.format(ex.stacktrace)
 
 
 def load_assets(request):
