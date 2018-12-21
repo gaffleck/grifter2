@@ -22,7 +22,7 @@ import logging
 from .models import Asset, Image
 logger = logging.getLogger(__name__)
 
-IS_HEROKU = os.environ.get('IS_HEROKU') == 1
+IS_HEROKU = os.environ.get('IS_HEROKU') == '1'
 q = django_rq.get_queue('default', is_async=IS_HEROKU)
 
 
