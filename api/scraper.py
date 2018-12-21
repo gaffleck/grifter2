@@ -22,7 +22,9 @@ import logging
 from .models import Asset, Image
 logger = logging.getLogger(__name__)
 
-q = django_rq.get_queue('default', is_async=False)
+IS_HEROKU = os.environ.get('IS_HEROKU') == 1
+q = django_rq.get_queue('default', is_async=IS_HEROKU)
+
 
 chrome_options = Options()  
 chrome_options.add_argument('--headless')
@@ -128,12 +130,14 @@ def fetch_data(url):
         return 'Finished processing {}'.format(len(results))
 
     except TimeoutException as ex:
-        logger.error('timed out')
-        return 'timeout error {} '.format(ex.stacktrace)
+        msg = 'timeout error {} '.format(ex.stacktrace)
+        logger.error(msg)
+        return msg
     
     except BaseException as ex:
-        logger.error('Exception')
-        return 'other error {}'.format(ex.stacktrace)
+        msg = 'other error {}'.format(ex)
+        logger.error(msg)
+        return msg
 
 
 def load_assets(request):
