@@ -43,12 +43,13 @@ def get_value(driver,selector, default_value=None):
         return default_value 
 
 
-def get_all_asset_urls(url):
+def get_all_asset_urls(url, max_length = 0):
     #keep scrolling until you get them all
     driver.get(url)
     element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ'))
     WebDriverWait(driver, TIMEOUT).until(element_present)
     SCROLL_PAUSE_TIME = 1
+    
 
     # Get scroll height
     last_height = driver.execute_script("return document.body.scrollHeight")
@@ -73,69 +74,94 @@ def get_all_asset_urls(url):
         # Calculate new scroll height and compare with last scroll height
         new_height = driver.execute_script("return document.body.scrollHeight")
         
-        if new_height == last_height:
+        if new_height == last_height or (max_length > 0):
             break
         last_height = new_height
 
-
     results = driver.find_elements_by_css_selector('.sc-eTuwsz.bBEBZi.sc-gGBfsJ.jdMjQQ h3 a')
+    if(max_length is not 0):
+        return results[0:max_length]
+
     return results
+
+
+def create_asset(asset_id, sale_num):
+    asset = Asset()
+    asset.id = asset_id    
+    asset.year = get_value(driver, '[data-key="AS400YearOfManufacture"] .static-value')   
+    asset.make = get_value(driver, '[data-key="AS400ManufacturerName"] .static-value')
+    asset.model = get_value(driver, '[data-key="AS400ModelName"] .static-value')
+    asset.serial_number = get_value(driver, '[data-key="AS400SerialOrVehicleIdNumber"] .static-value')
+    asset.usage = get_value(driver, '[data-key="AS400Odometer"] .static-value')
+    asset.equipment_type = get_value(driver, '[data-key="AS400AssetType"] .static-value') 
+    asset.comes_with = get_value(driver, '[data-key="CW"] .static-value') 
+    asset.catalog_notes = get_value(driver, '[data-key="CatalogNotes"] .static-value') 
+    asset.sale_number = sale_num
+    asset.title = get_value(driver, 'h1')
+    asset.save()    
+    
+    return asset
+
+
+def handle_section(driver, section_selector, section_name, asset):
+    logger.debug('handling section {}'.format(section_name))    
+    #"[id='{}'] + div img[data-index]".format(section.get_attribute('id'))
+    images = driver.find_elements_by_css_selector(section_selector)
+
+    for img_file in images:
+        img = Image()
+        img.asset_id = asset.id
+        img.file_name = img_file.get_attribute('data-loadsrc')
+        img.sectionName = section_name
+        #TODO: bulk save?
+        img.save()
+
 
 def fetch_data(url):
     logger.debug('fetching data')
-    
-    
+
     try:
         
-        results = get_all_asset_urls(url)
+        max_count = 5 if IS_DEV else 0
+
+        results = get_all_asset_urls(url, max_count)
         urls = []
         for res in results:
             urls.append(res.get_attribute('href'))
         
         logger.debug('got titles {}'.format(len(results)))
         sale_num = None
-        index = 1
+        
         for url in urls:
             #go to detail page
             driver.get(url)
-            element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '#p_p_id_searchitemdetail_WAR_rbaportlet_'))
+            element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '#p_p_id_itemdetailstabs_WAR_rbaportlet_'))
             WebDriverWait(driver, TIMEOUT).until(element_present)
             
-            asset_id = parse_qs(urlparse(url).query)['invId'][0]
-            asses = Asset.objects.filter(id=asset_id)
-
             if(sale_num is None):
                 sale_key = parse_qs(urlparse(url).query)['auction'][0]
                 sale_num = int(sale_key.split('-')[2])
-            if(len(asses) is 0):
-                ass = Asset()
-                ass.id = asset_id
-            else:
-                ass = asses.first()
-                
-            ass.year = get_value(driver, '[data-key="AS400YearOfManufacture"] .static-value')
-            ass.make = get_value(driver, '[data-key="AS400ManufacturerName"] .static-value')
-            ass.model = get_value(driver, '[data-key="AS400ModelName"] .static-value')
-            ass.serial_number = get_value(driver, '[data-key="AS400SerialOrVehicleIdNumber"] .static-value')
-            ass.usage = get_value(driver, '[data-key="AS400Odometer"] .static-value')
-            ass.equipment_type = get_value(driver, '[data-key="AS400AssetType"] .static-value') 
-            ass.comes_with = get_value(driver, '[data-key="CW"] .static-value') 
-            ass.catalog_notes = get_value(driver, '[data-key="CatalogNotes"] .static-value') 
-            ass.sale_number = sale_num
-            ass.title = get_value(driver, 'h1')
-            ass.save()
 
+            asset_id = parse_qs(urlparse(url).query)['invId'][0]
 
-            images = driver.find_elements_by_css_selector('.item-details-carousel-container img')
-            section = 'general'
-            for img_file in images:
-                img = Image()
-                img.asset_id = ass.id
-                img.file_name = img_file.get_attribute('src')
-                img.sectionName = section
-                #TODO: bulk save?
-                img.save()
-            index = index+1
+            asses = Asset.objects.filter(id=asset_id)
+            #we've already seen this asset
+            if(len(asses) is not 0):
+                continue
+
+            ass = create_asset(asset_id, sale_num)
+            
+            #get general section 
+            selector = '#p_p_id_searchitemdetail_WAR_rbaportlet_ img[data-index]'
+            handle_section(driver,selector, 'General', ass)
+
+            #get sections  
+            sections = driver.find_elements_by_css_selector('h5.h-lvl-2')
+            for section in sections:
+                section_name = section.get_attribute('id')
+                selector = "[id='{}'] + div img[data-index]".format(section_name)
+                handle_section(driver, selector, section_name, ass)
+
 
         return 'Finished processing {}'.format(len(results))
 
