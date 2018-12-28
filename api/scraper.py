@@ -153,13 +153,14 @@ def fetch_data(url):
             
             #get general section 
             selector = '#p_p_id_searchitemdetail_WAR_rbaportlet_ img[data-index]'
-            handle_section(driver,selector, 'General', ass)
+            handle_section(driver, selector, 'General', ass)
 
             #get sections  
             sections = driver.find_elements_by_css_selector('h5.h-lvl-2')
             for section in sections:
-                section_name = section.get_attribute('id')
-                selector = "[id='{}'] + div img[data-index]".format(section_name)
+                section_id = section.get_attribute('id')
+                section_name = section.text
+                selector = "[id='{}'] + div img[data-index]".format(section_id)
                 handle_section(driver, selector, section_name, ass)
 
 
@@ -181,7 +182,7 @@ def load_assets(request):
     event_location = request.GET.get('location')
     event_name = request.GET.get('event_name')
     url = generate_url(event_location,event_name)
-    job = q.enqueue(fetch_data, url, timeout='15m')
+    job = q.enqueue(fetch_data, url, timeout='120m')
 
     return HttpResponse(content= 'job {}'.format(job.id), status=201)
 
