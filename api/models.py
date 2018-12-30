@@ -35,18 +35,6 @@ class Contact(models.Model):
         """Return a human readable representation of the model instance."""
         return "{}".format(self.first_name)
 
-class Note(models.Model):
-    """ customer notes"""
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    content = models.CharField(max_length=1000)
-    contact = models.ForeignKey(Contact, related_name='notes', on_delete=models.CASCADE)
-
-    def __str__(self):
-        """Return a human readable representation of the model instance."""
-        return "{}".format(self.content)
-
-
 class Asset(models.Model):
     """Asset Class """
     make = models.CharField(max_length=255, null=True)
@@ -67,6 +55,18 @@ class Asset(models.Model):
     def __str__(self):
         return "Asset {} {} {}".format(self.make, self.model, self.year)
 
+class Note(models.Model):
+    """ customer notes"""
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    content = models.CharField(max_length=1000)
+    user = models.ForeignKey(User, related_name='notes', on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """Return a human readable representation of the model instance."""
+        return "{}".format(self.content)
+
 
 class Image(models.Model):
     file_name = models.CharField(max_length=255)
@@ -74,7 +74,7 @@ class Image(models.Model):
     sectionName = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return "image {}".format(self.fileName)
+        return "image {}".format(self.file_name)
 
 
 class Purchase(models.Model):

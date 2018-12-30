@@ -120,30 +120,24 @@ def handle_section(driver, section_selector, section_name, asset):
 def fetch_data(url):
     logger.debug('fetching data')
 
-    try:
-        
+    try:        
         max_count = 5 if IS_DEV else 0
-
         results = get_all_asset_urls(url, max_count)
         urls = []
         for res in results:
-            urls.append(res.get_attribute('href'))
-        
+            urls.append(res.get_attribute('href'))        
         logger.debug('got titles {}'.format(len(results)))
-        sale_num = None
-        
+        sale_num = None        
         for url in urls:
             #go to detail page
             driver.get(url)
             element_present = EC.presence_of_element_located((By.CSS_SELECTOR, '#p_p_id_itemdetailstabs_WAR_rbaportlet_'))
-            WebDriverWait(driver, TIMEOUT).until(element_present)
-            
+            WebDriverWait(driver, TIMEOUT).until(element_present)            
             if(sale_num is None):
                 sale_key = parse_qs(urlparse(url).query)['auction'][0]
                 sale_num = int(sale_key.split('-')[2])
 
             asset_id = parse_qs(urlparse(url).query)['invId'][0]
-
             asses = Asset.objects.filter(id=asset_id)
             #we've already seen this asset
             if(len(asses) is not 0):

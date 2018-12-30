@@ -108,13 +108,14 @@ class ContactSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     contacts = ContactSubSerializer(required=False, many=True)
-    conversations = ConversationSerializer(required=False, many=True)    
+    conversations = ConversationSerializer(required=False, many=True)  
+    notes = NoteSerializer(required=False, many=True)  
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = User
-        fields = ('id', 'first_name', 'last_name', 'image', 'phone_number', 'conversations', 'date_created', \
-            'date_modified', 'contacts')
+        fields = ('id', 'first_name', 'last_name', 'image', 'phone_number', 'notes', 'conversations', \
+            'date_created', 'date_modified', 'contacts')
         read_only_fields = ('date_created', 'date_modified')
 
 class TwilioMessageSerializer(serializers.ModelSerializer):
